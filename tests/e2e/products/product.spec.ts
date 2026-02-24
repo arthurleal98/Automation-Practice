@@ -28,6 +28,7 @@ test.describe('Product Details', () => {
 
 
   });
+
   test('Pesquisar produto e verificar detalhes', async ({ homePage, productPage, page }) => {
     // 1. Launch browser and 2. Navigate to url 'http://automationexercise.com'
     await homePage.acessarPaginaInicial();
@@ -51,7 +52,9 @@ test.describe('Product Details', () => {
     await productPage.clicarViewProduct(1);
 
   });
-});  test('Verificar detalhes do produto pesquisado', async ({ homePage, productPage, page }) => {
+});
+
+test('Verificar detalhes do produto pesquisado', async ({ homePage, productPage, page }) => {
     // 1. Abrir o navegador e 2. Navegar para a url 'http://automationexercise.com'
     await homePage.acessarPaginaInicial();
 

@@ -36,7 +36,7 @@ test.describe('Testes de API - Produtos', () => {
     test('POST - Pesquisar produto', async ({ request }) => {
         const apiService = new ProductsApiService(request);
         
-        const response = await apiService.searchProduct('jean');
+        const response = await apiService.searchProduct('top');
         
         // Validações básicas de status HTTP
         expect(response.status()).toBe(200);

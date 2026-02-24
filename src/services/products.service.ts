@@ -14,7 +14,7 @@ export class ProductsApiService {
 
     async searchProduct(keyword: string): Promise<APIResponse> {
         // A API do Automation Exercise espera parâmetros de formulário para POST
-        return this.request.post(`${this.baseUrl}/`, {
+        return this.request.post(`${this.baseUrl}/searchProduct`, {
             form: {
                 search_product: keyword
             }

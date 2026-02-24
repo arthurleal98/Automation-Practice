@@ -6,7 +6,7 @@ export class ProductPage extends BasePage {
     readonly itemsList: string = '//*[@class="product-image-wrapper"]';
     readonly productName: string = '//*[@class="product-information"]//h2';
     readonly productCategory: string = 'p:has-text("Category:")'
-    readonly productPrice: string = '//*[@class="product-information"]//span[1](contains(@class, "price"))';
+    readonly productPrice: string = '//*[@class="product-information"]//span[contains(text(), "Rs.")]';
     readonly productAvailability: string = 'b:has-text("Availability:")'
     readonly productCondition: string = 'b:has-text("Condition:")';
     readonly productBrand: string = 'b:has-text("Brand:")';
