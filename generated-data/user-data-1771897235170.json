@@ -1,0 +1,22 @@
+{
+  "nome": "Teste",
+  "email": "teste1771897222114@exemplo.com",
+  "password": "senha123",
+  "nascimento": {
+    "dia": "10",
+    "mes": "5",
+    "ano": "1990"
+  },
+  "endereco": {
+    "primeiroNome": "Arthur",
+    "ultimoNome": "Teste",
+    "empresa": "QA Automation",
+    "endereco1": "Rua de Teste, 123",
+    "endereco2": "Apto 101",
+    "pais": "United States",
+    "estado": "California",
+    "cidade": "Los Angeles",
+    "cep": "90001",
+    "celular": "1234567890"
+  }
+}
