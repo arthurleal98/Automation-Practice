@@ -1,5 +1,7 @@
 import { test, expect } from '@playwright/test';
 import { UsersApiService } from '../../src/services/users.service';
+import { UserData, ApiResponse } from '../../src/types/api';
+import { DataUtils } from '../../src/utils/data.utils';
 
 test.describe('Testes de API - Usuários', () => {
   let apiService: UsersApiService;
@@ -8,27 +10,9 @@ test.describe('Testes de API - Usuários', () => {
     apiService = new UsersApiService(request);
   });
 
-  function generateUser() {
-    const timestamp = Date.now();
-    return {
-      name: 'API User Test',
-      email: `api_test_${timestamp}@example.com`,
-      password: 'password123',
-      title: 'Mr',
-      birth_date: '10',
-      birth_month: '05',
-      birth_year: '1990',
-      firstname: 'API',
-      lastname: 'Test',
-      company: 'QA Corp',
-      address1: 'Street 1',
-      address2: 'Apt 2',
-      country: 'United States',
-      zipcode: '90001',
-      state: 'California',
-      city: 'Los Angeles',
-      mobile_number: '1234567890'
-    };
+  // helper to generate realistic user data with possibilidade de overrides
+  function generateUser(overrides?: Partial<UserData>): UserData {
+    return DataUtils.generateUser(overrides);
   }
 
   test('POST - Criar conta de usuário', async () => {
@@ -43,7 +27,7 @@ test.describe('Testes de API - Usuários', () => {
   });
 
   test('POST - Verificar login com dados válidos', async () => {
-    const user = generateUser();
+    const user: UserData = generateUser();
 
     await apiService.createAccount(user);
 
@@ -65,7 +49,7 @@ test.describe('Testes de API - Usuários', () => {
   });
 
   test('DELETE - Excluir conta de usuário', async () => {
-    const user = generateUser();
+    const user: UserData = generateUser();
 
     await apiService.createAccount(user);
 
@@ -78,7 +62,7 @@ test.describe('Testes de API - Usuários', () => {
   });
 
   test('GET - Buscar detalhes do usuário por email', async () => {
-    const user = generateUser();
+    const user: UserData = generateUser();
 
     await apiService.createAccount(user);
 

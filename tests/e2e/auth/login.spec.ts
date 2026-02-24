@@ -24,13 +24,13 @@ test.describe('Login de usuário', () => {
     await expect(page.locator(loginPage.loginButton)).toBeVisible();
 
     // 6. Preencher email e senha corretos
-    await loginPage.preencherDadosLogin('sucess@sucess.com', 'sucess123');
+    await loginPage.fillLoginDetails('sucess@sucess.com', 'sucess123');
 
     // 7. Clicar no botão 'Login'
-    await loginPage.clicarLogin();
+    await loginPage.clickLogin();
 
     // 8. Verificar que 'Logged in as username' é visível
-    expect(await loginPage.validarUsuarioLogado('sucess')).toBeTruthy();
+    expect(await loginPage.isUserLoggedIn('sucess')).toBeTruthy();
   });
 
   test('Login com credenciais incorretas', async ({ homePage, loginPage, page }) => {
@@ -41,10 +41,10 @@ test.describe('Login de usuário', () => {
     await homePage.acessarPaginaLogin();
 
     // 3. Preencher email e senha incorretos
-    await loginPage.preencherDadosLogin('email_invalido@teste.com', 'senha_errada');
+    await loginPage.fillLoginDetails('email_invalido@teste.com', 'senha_errada');
 
     //4. Clicar no botão 'Login'
-    await loginPage.clicarLogin();
+    await loginPage.clickLogin();
 
     //5. Verificar que 'Your email or password is incorrect!' é visível
     await expect(page.locator(loginPage.invalidCredentialsMessage)).toBeVisible();
@@ -64,16 +64,16 @@ test.describe('Login de usuário', () => {
     // 5. Verificar que 'Login to your account' é visível
     await expect(page.locator(loginPage.loginButton)).toBeVisible();
     // 6. Preencher email e senha corretos
-    await loginPage.preencherDadosLogin('sucess@sucess.com', 'sucess123');
+    await loginPage.fillLoginDetails('sucess@sucess.com', 'sucess123');
 
     // 7. Clicar no botão 'Login'
-    await loginPage.clicarLogin();
+    await loginPage.clickLogin();
 
     // 8. Verificar que 'Logged in as username' é visível
-    expect(await loginPage.validarUsuarioLogado('sucess')).toBeTruthy();
+    expect(await loginPage.isUserLoggedIn('sucess')).toBeTruthy();
 
     // 9. Clicar no botão 'Logout'
-    await loginPage.clicarLogout();
+    await loginPage.clickLogout();
 
     // 10. Verificar que 'Home' é visível
     await expect(page.url()).toBe('https://automationexercise.com/login');

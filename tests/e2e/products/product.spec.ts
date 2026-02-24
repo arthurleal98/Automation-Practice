@@ -20,7 +20,7 @@ test.describe('Product Details', () => {
     await expect(page.locator(productPage.productsHeader)).toBeVisible();
 
     // 6. Clicar em ver detalhes do primeiro produto
-    await productPage.clicarViewProduct(1);
+    await productPage.clickViewProduct(1);
 
     //7. Verificar que está na página de detalhes do produto
     await expect(page).toHaveTitle(/Automation Exercise - Product Details/);
@@ -46,10 +46,10 @@ test.describe('Product Details', () => {
 
     // 6. Pesquisar por um produto específico usando a barra de pesquisa
     const nomeProduto = 'Blue Top';
-    await productPage.pesquisarProduto(nomeProduto);
+    await productPage.searchForProduct(nomeProduto);
 
     //7. Clicar em ver detalhes do produto pesquisado
-    await productPage.clicarViewProduct(1);
+    await productPage.clickViewProduct(1);
 
   });
 });
@@ -69,7 +69,7 @@ test('Verificar detalhes do produto pesquisado', async ({ homePage, productPage,
 
     // 6. Inserir o nome do produto na barra de pesquisa e clicar no botão de pesquisa
     const nomeProduto = 'Blue Top';
-    await productPage.pesquisarProduto(nomeProduto);
+    await productPage.searchForProduct(nomeProduto);
 
     // 7. Verificar que 'SEARCHED PRODUCTS' é visível
     await expect(page.locator('h2:has-text("Searched Products")')).toBeVisible();
@@ -78,13 +78,13 @@ test('Verificar detalhes do produto pesquisado', async ({ homePage, productPage,
     await expect(page.locator(productPage.itemsList)).toContainText(nomeProduto);
 
     // 9. Clicar em 'View Product' do primeiro resultado
-    await productPage.clicarViewProduct(1);
+    await productPage.clickViewProduct(1);
 
     // 10. Verificar detalhes: nome, categoria, preço, disponibilidade, condição e marca
-    expect(await productPage.obterNomeProduto()).toContain(nomeProduto);
-    expect(await productPage.obterCategoriaProduto()).toBeDefined();
-    expect(await productPage.obterPrecoProduto()).toBeDefined();
-    expect(await productPage.obterDisponibilidadeProduto()).toBeDefined();
-    expect(await productPage.obterCondicaoProduto()).toBeDefined();
-    expect(await productPage.obterMarcaProduto()).toBeDefined();
+    expect(await productPage.getProductName()).toContain(nomeProduto);
+    expect(await productPage.getProductCategory()).toBeDefined();
+    expect(await productPage.getProductPrice()).toBeDefined();
+    expect(await productPage.getProductAvailability()).toBeDefined();
+    expect(await productPage.getProductCondition()).toBeDefined();
+    expect(await productPage.getProductBrand()).toBeDefined();
   });

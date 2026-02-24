@@ -1,15 +1,21 @@
 {
   "name": "automation-practice",
   "version": "1.0.0",
-  "description": "",
+  "description": "Conjunto de testes automatizados para o site Automation Exercise usando Playwright e TypeScript",
   "main": "index.js",
-  "scripts": {},
+  "scripts": {
+    "test": "npx playwright test",
+    "test:api": "npx playwright test tests/api",
+    "test:e2e": "npx playwright test tests/e2e",
+    "test:debug": "npx playwright test --ui",
+    "report": "npx playwright show-report"
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/arthurleal98/Automation-Practice.git"
   },
   "keywords": [],
-  "author": "",
+  "author": "Arthur",
   "license": "ISC",
   "type": "commonjs",
   "bugs": {

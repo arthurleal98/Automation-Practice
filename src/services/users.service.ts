@@ -1,5 +1,10 @@
 import { APIRequestContext, APIResponse } from '@playwright/test';
+import { UserData, ApiResponse } from '../types/api';
 
+/**
+ * Serviço de API para operações relacionadas a usuários.
+ * Encapsula chamadas HTTP, deixando os testes mais legíveis.
+ */
 export class UsersApiService {
     readonly request: APIRequestContext;
     readonly baseUrl: string = 'https://automationexercise.com/api';
@@ -8,7 +13,11 @@ export class UsersApiService {
         this.request = request;
     }
 
-    async createAccount(userData: any): Promise<APIResponse> {
+    /**
+     * Cria um novo usuário utilizando os dados fornecidos.
+     */
+    async createAccount(userData: UserData): Promise<APIResponse> {
+        // o objeto "form" aqui mapeia explicitamente os campos esperados pela API
         return this.request.post(`${this.baseUrl}/createAccount`, {
             form: {
                 name: userData.name,
@@ -32,16 +41,19 @@ export class UsersApiService {
         });
     }
 
+    /**
+     * Apaga uma conta existente.
+     */
     async deleteAccount(email: string, password: string): Promise<APIResponse> {
         return this.request.delete(`${this.baseUrl}/deleteAccount`, {
             form: {
-                email: email,
-                password: password
+                email,
+                password
             }
         });
     }
 
-    async updateAccount(userData: any): Promise<APIResponse> {
+    async updateAccount(userData: Partial<UserData>): Promise<APIResponse> {
         return this.request.put(`${this.baseUrl}/updateAccount`, {
             form: userData
         });
@@ -49,31 +61,28 @@ export class UsersApiService {
 
     async getUserDetailByEmail(email: string): Promise<APIResponse> {
         return this.request.get(`${this.baseUrl}/getUserDetailByEmail`, {
-            params: {
-                email: email
-            }
+            params: { email }
         });
     }
 
     async verifyLogin(email: string, password: string): Promise<APIResponse> {
         return this.request.post(`${this.baseUrl}/verifyLogin`, {
-            form: {
-                email: email,
-                password: password
-            }
+            form: { email, password }
         });
     }
 
     async searchAccountByEmail(email: string): Promise<APIResponse> {
-        return this.request.get(`${this.baseUrl}/seachAccountByEmail`, {
-            params: {
-                email: email
-            }
+        // atenção: rota original contém typo "seach" , mas não estava sendo usada
+        return this.request.get(`${this.baseUrl}/searchAccountByEmail`, {
+            params: { email }
         });
     }
 
+    /**
+     * Helper simplificado para criar um usuário de teste com valores padrão.
+     */
     async createTestUser(email?: string): Promise<APIResponse> {
-        const testUserData = {
+        const testUserData: UserData = {
             name: 'API User Test',
             email: email || `api_user_${Date.now()}@test.com`,
             password: 'password123',
@@ -95,6 +104,5 @@ export class UsersApiService {
 
         return this.createAccount(testUserData);
     }
-
-
 }
+

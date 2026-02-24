@@ -18,6 +18,11 @@ export class JsonUtils {
     fs.writeFileSync(filePath, JSON.stringify(data, null, 2), 'utf-8');
   }
 
+  // alias em inglês
+  static async saveJson(data: any, fileName: string): Promise<void> {
+    return this.writeJson(data, fileName);
+  }
+
   /**
    * Lê dados de um arquivo JSON.
    * @param fileName O nome do arquivo a ser lido.
@@ -33,6 +38,10 @@ export class JsonUtils {
 
     const fileContent = fs.readFileSync(filePath, 'utf-8');
     return JSON.parse(fileContent);
+  }
+
+  static loadJson(fileName: string): any {
+    return this.readJson(fileName);
   }
 
   /**

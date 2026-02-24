@@ -51,6 +51,11 @@ export class LoginPage extends BasePage {
         await this.clicar(this.page.locator(this.logoutButton));
     }
 
+    // English aliases for the most frequently used actions
+    async clickLogout(): Promise<void> {
+        await this.clicarLogout();
+    }
+
 
 
     async preencherDadosIniciaisSignup(nome: string, email: string): Promise<void> {
@@ -60,6 +65,10 @@ export class LoginPage extends BasePage {
 
     async clicarSignup(): Promise<void> {
         await this.clicar(this.page.locator(this.signupButton));
+    }
+
+    async clickSignup(): Promise<void> {
+        await this.clicarSignup();
     }
 
     async preencherInformacoesConta(password: string, day: string, month: string, year: string): Promise<void> {
@@ -103,13 +112,25 @@ export class LoginPage extends BasePage {
         await this.clicar(this.page.locator(this.createAccountButton));
     }
 
+    async clickCreateAccount(): Promise<void> {
+        await this.clicarCriarConta();
+    }
+
     async preencherDadosLogin(email: string, password: string): Promise<void> {
         await this.preencher(this.page.locator(this.loginEmailInput), email);
         await this.preencher(this.page.locator(this.loginPasswordInput), password);
     }
 
+    async fillLoginDetails(email: string, password: string): Promise<void> {
+        await this.preencherDadosLogin(email, password);
+    }
+
     async clicarLogin(): Promise<void> {
         await this.clicar(this.page.locator(this.loginButton));
+    }
+
+    async clickLogin(): Promise<void> {
+        await this.clicarLogin();
     }
 
     async validarMensagemContaCriada(): Promise<void> {
@@ -130,11 +151,23 @@ export class LoginPage extends BasePage {
     }
     }
 
+    async isUserLoggedIn(name: string): Promise<boolean> {
+        return this.validarUsuarioLogado(name);
+    }
+
     async clicarDeletarConta(): Promise<void> {
         await this.clicar(this.page.locator(this.deleteAccountButton));
     }
 
+    async clickDeleteAccount(): Promise<void> {
+        await this.clicarDeletarConta();
+    }
+
     async validarMensagemContaDeletada(): Promise<void> {
         await this.esperarEstarVisivel(this.page.locator(this.accountDeletedHeader));
+    }
+
+    async expectAccountDeletedMessage(): Promise<void> {
+        await this.validarMensagemContaDeletada();
     }
 }

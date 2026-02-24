@@ -2,23 +2,37 @@ import { test, expect } from '../../../src/fixtures/test.fixture';
 import * as fs from 'fs';
 import * as path from 'path';
 import { JsonUtils } from '../../../utils/json.utils';
+import { DataUtils } from '../../../src/utils/data.utils';
+import { UserData } from '../../../src/types/api';
 
-test.describe('Registro de usuário e exclusão', () => {
-  test('Registro de usuário', async ({ homePage, loginPage, page }) => {
+test.describe.serial('User Registration and Deletion', () => {
+  test('User registration flow', async ({ homePage, loginPage, page }) => {
 
-    // Massa de dados organizada
-    const userData = {
-      nome: 'Teste',
-      email: `teste${Date.now()}@exemplo.com`,
-      password: 'senha123',
-      nascimento: { dia: '10', mes: '5', ano: '1990' },
+    // Gerar dados de usuário usando o utilitário; em seguida adaptamos o
+    // formato para o formulário da UI.
+    const random = DataUtils.generateUser();
+    const userData: any = {
+      nome: random.name,
+      email: random.email,
+      password: random.password,
+      nascimento: {
+        dia: random.birth_date,
+        // remove leading zeros because select options are not zero-padded
+        mes: String(Number(random.birth_month)),
+        ano: random.birth_year,
+      },
       endereco: {
-        primeiroNome: 'Arthur', ultimoNome: 'Teste',
-        empresa: 'QA Automation', endereco1: 'Rua de Teste, 123',
-        endereco2: 'Apto 101', pais: 'United States',
-        estado: 'California', cidade: 'Los Angeles',
-        cep: '90001', celular: '1234567890'
-      }
+        primeiroNome: random.firstname,
+        ultimoNome: random.lastname,
+        empresa: random.company,
+        endereco1: random.address1,
+        endereco2: random.address2,
+        pais: random.country,
+        estado: random.state,
+        cidade: random.city,
+        cep: random.zipcode,
+        celular: random.mobile_number,
+      },
     };
     
     // 1. Abrir o navegador e 2. Navegar para a url 'http://automationexercise.com'
@@ -38,7 +52,7 @@ test.describe('Registro de usuário e exclusão', () => {
     await loginPage.preencherDadosIniciaisSignup(userData.nome, userData.email);
 
     // 7. Clicar no botão 'Signup'
-    await loginPage.clicarSignup();
+    await loginPage.clickSignup();
 
     // 8. Verificar que 'ENTER ACCOUNT INFORMATION' é visível
     await expect(page.locator(loginPage.accountInfoTitle)).toBeVisible();
@@ -64,7 +78,7 @@ test.describe('Registro de usuário e exclusão', () => {
     );
 
     // 13. Clicar no botão 'Create Account'
-    await loginPage.clicarCriarConta();
+    await loginPage.clickCreateAccount();
 
     // 14. Verificar que 'ACCOUNT CREATED!' é visível
     await loginPage.validarMensagemContaCriada();
@@ -73,14 +87,14 @@ test.describe('Registro de usuário e exclusão', () => {
     await loginPage.clicarContinuar();
 
     // 16. Verificar que 'Logged in as username' é visível
-    expect(await loginPage.validarUsuarioLogado(userData.nome)).toBeTruthy();
+    expect(await loginPage.isUserLoggedIn(userData.nome)).toBeTruthy();
 
     // Salvar dados gerados em JSON
     await JsonUtils.writeJson(userData, `user-data-${Date.now()}.json`);
     
   });
 
-  test('Exclusão de usuário', async ({ homePage, loginPage, page }) => {
+  test('User deletion flow', async ({ homePage, loginPage, page }) => {
 
       // Recuperar dados do último registro
     const userData = JsonUtils.getLatestJson('user-data-');
@@ -99,16 +113,16 @@ test.describe('Registro de usuário e exclusão', () => {
     await expect(page.locator(loginPage.loginButton)).toBeVisible();
 
     // 6. Preencher email e senha para login  
-    await loginPage.preencherDadosLogin(userData.email, userData.password);
+    await loginPage.fillLoginDetails(userData.email, userData.password);
 
     // 7. Clicar no botão 'Login'
-    await loginPage.clicarLogin();
+    await loginPage.clickLogin();
 
     // 8. Verificar que 'Logged in as username' é visível
-    await loginPage.validarUsuarioLogado(userData.nome);
+    await loginPage.isUserLoggedIn(userData.nome);
 
     // 9. Clicar no botão 'Delete Account'  
-    await loginPage.clicarDeletarConta();
+    await loginPage.clickDeleteAccount();
 
     // 10. Verificar que 'ACCOUNT DELETED!' é visível
     await expect(page.locator(loginPage.accountDeletedHeader)).toBeVisible();

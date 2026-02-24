@@ -1,36 +1,59 @@
-# Automação de Testes - Automation Exercise
+# Automa��o de Testes - Automation Exercise
 
-Este projeto consiste em uma suíte de testes automatizados (E2E e API) desenvolvida com **Playwright** e **TypeScript**, focada na validação das funcionalidades do site Automation Exercise.
+Este framework de testes surgiu como um exemplo pr�tico de automa��o usando **Playwright** + **TypeScript**.
+Ele cobre tanto testes de interface (E2E) quanto de API, e foi organizado para ser did�tico
+ e adapt�vel a novos cen�rios.
 
-## 🚀 Tecnologias Utilizadas
+## ?? Padr�es e Arquitetura
 
-- Playwright - Framework de testes.
-- TypeScript - Linguagem de programação.
-- Node.js - Ambiente de execução.
+O c�digo segue um padr�o **Page Object Model (POM)** combinado com uma camada de servi�os
+para chamadas de API. Isso garante:
 
-## 📂 Estrutura do Projeto
+- Separa��o clara entre l�gica de navega��o/a��o e as valida��es.
+- **Fixtures personalizadas** (em `src/fixtures/test.fixture.ts`) para inje��o de p�ginas
+  e reutiliza��o de inst�ncias dentro dos testes.
+- **Tipos TypeScript fortes** definidos em `src/types/api.ts` para maior previsibilidade
+  durante o desenvolvimento.
+- **Utilit�rios comuns** (`utils/DataUtils`, `utils/JsonUtils`) para gera��o de dados e
+  persist�ncia tempor�ria entre testes.
 
-O projeto segue o padrão **Page Object Model (POM)** e separa as responsabilidades de testes de interface e API.
+### Design Decisions
 
-- `src/pages`: Classes que representam as páginas da aplicação (Page Objects).
-- `src/services`: Classes de serviço para abstração de chamadas de API.
-- `src/fixtures`: Fixtures customizadas do Playwright para injeção de dependências.
-- `utils`: Utilitários gerais (ex: manipulação de arquivos JSON).
-- `tests/e2e`: Testes de ponta a ponta (Interface de Usuário).
-- `tests/api`: Testes de integração de API.
+1. **Localizadores centralizados**: as classes de p�gina exp�em strings de seletor que
+   podem ser usadas nos testes via fixtures.
+2. **M�todos bilingues**: a base do projeto usa nomes em portugu�s, mas adiciona aliases
+   em ingl�s para facilitar leitura em times internacionais.
+3. **API services** encapsulam detalhes do protocolo (`form`, `params`) e retornam
+   objetos `APIResponse` gen�ricos.
 
-## ⚙️ Pré-requisitos
+## ?? Ferramentas e Depend�ncias
 
-Certifique-se de ter o **Node.js** instalado em sua máquina.
+- **Playwright** v1.58+ com suporte a TypeScript.
+- **Node.js** (vers�o LTS recomendada).
+- Tipos Node.js e configura��es de compilador via `tsconfig.json`.
 
-## 📦 Instalação
+## ??? Estrutura do Projeto
 
-1. Clone o repositório:
+- `src/pages` � Page Objects (objetos de p�gina).
+- `src/services` � Servi�os de API.
+- `src/fixtures` � Fixtures customizadas para testes Playwright.
+- `tests/e2e` � Testes de ponta a ponta de UI.
+- `tests/api` � Testes de API.
+- `utils` � Utilit�rios gerais como geradores de dados e manipula��o de JSON.
+- `src/types` � Defini��es de tipos/interfaces compartilhadas.
+
+## ?? Pr�-requisitos
+
+Certifique-se de ter o **Node.js** instalado em sua m�quina.
+
+## ?? Instala��o
+
+1. Clone o reposit�rio:
    ```bash
    git clone <url-do-repositorio>
    ```
 
-2. Instale as dependências do projeto:
+2. Instale as depend�ncias do projeto:
    ```bash
    npm install
    ```
@@ -40,7 +63,7 @@ Certifique-se de ter o **Node.js** instalado em sua máquina.
    npx playwright install
    ```
 
-## ▶️ Executando os Testes
+## ?? Executando os Testes
 
 ### Rodar todos os testes
 ```bash
@@ -57,32 +80,38 @@ npx playwright test tests/api
 npx playwright test tests/e2e
 ```
 
-### Rodar em modo debug (com interface gráfica)
+### Rodar em modo debug (com interface gr�fica)
 ```bash
 npx playwright test --ui
 ```
 
-### Visualizar o relatório HTML
+### Visualizar o relat�rio HTML
 ```bash
 npx playwright show-report
 ```
 
-## 🔮 Roadmap e Melhorias Futuras
+## ?? Boas Pr�ticas Adotadas
 
-Estamos constantemente evoluindo o framework. Abaixo estão os pontos de melhoria mapeados e funcionalidades que serão implementadas em breve:
+- Uso intensivo de async/await e espera expl�cita via `expect(locator).toBeVisible`.
+- Reuso de dados gerados entre fluxos (ex: cadastro -> login) mediante `JsonUtils`.
+- Testes isolados que criam e limpam seus pr�prios dados.- Quando um fluxo depende de outro (cadastro seguido de exclusão), usamos `test.describe.serial` para garantir execução sequencial em vez de concorrente.
+## ?? Roadmap e Melhorias Futuras
 
-### 🥒 BDD com Cucumber (Gherkin)
-- Implementação do **Cucumber** para permitir a escrita de cenários de teste em linguagem natural (Gherkin).
-- Objetivo: Melhorar a comunicação entre QA, Desenvolvedores e Stakeholders.
+Estamos constantemente evoluindo o framework. Abaixo est�o os pontos de melhoria mapeados e funcionalidades que ser�o implementadas em breve:
 
-### 📈 Cobertura de Testes
-- Adição de novos casos de teste para cobrir fluxos alternativos e de exceção.
+### ?? BDD com Cucumber (Gherkin)
+- Implementa��o do **Cucumber** para permitir a escrita de cen�rios de teste em linguagem natural (Gherkin).
+- Objetivo: Melhorar a comunica��o entre QA, Desenvolvedores e Stakeholders.
+
+### ?? Cobertura de Testes
+- Adi��o de novos casos de teste para cobrir fluxos alternativos e de exce��o.
 - Refinamento dos testes existentes para maior robustez.
 
-### 📱 Testes Mobile
-- **Em breve:** Disponibilização de testes automatizados focados em emulação de dispositivos móveis e responsividade.
-- Validação da experiência do usuário em telas menores (Android/iOS via emulação do Playwright).
+### ?? Testes Mobile
+- **Em breve:** Disponibiliza��o de testes automatizados focados em emula��o de dispositivos m�veis e responsividade.
+- Valida��o da experi�ncia do usu�rio em telas menores (Android/iOS via emula��o do Playwright).
 
-## 📝 Notas Adicionais
+## ?? Notas Adicionais
 
-- O projeto utiliza um utilitário (`JsonUtils`) para persistir dados de massa de teste gerados dinamicamente, permitindo o compartilhamento de dados entre testes de criação e exclusão de conta.
+- O projeto utiliza um utilit�rio (`JsonUtils`) para persistir dados de massa de teste gerados dinamicamente, permitindo o compartilhamento de dados entre testes de cria��o e exclus�o de conta.
+
