@@ -1,117 +1,265 @@
-# Automa��o de Testes - Automation Exercise
+﻿# 🚀 Automação de Testes - Automation Exercise
 
-Este framework de testes surgiu como um exemplo pr�tico de automa��o usando **Playwright** + **TypeScript**.
-Ele cobre tanto testes de interface (E2E) quanto de API, e foi organizado para ser did�tico
- e adapt�vel a novos cen�rios.
+Este framework de testes foi desenvolvido como um exemplo prático de automação utilizando **Playwright + TypeScript**, cobrindo tanto testes de **Interface (E2E)** quanto **API**.
 
-## ?? Padr�es e Arquitetura
+O projeto foi estruturado seguindo **boas práticas de Clean Code**, princípios de **manutenibilidade**, **reutilização** e o padrão **Page Object Model (POM)**, tornando-o escalável e adaptável a novos cenários.
 
-O c�digo segue um padr�o **Page Object Model (POM)** combinado com uma camada de servi�os
-para chamadas de API. Isso garante:
+---
 
-- Separa��o clara entre l�gica de navega��o/a��o e as valida��es.
-- **Fixtures personalizadas** (em `src/fixtures/test.fixture.ts`) para inje��o de p�ginas
-  e reutiliza��o de inst�ncias dentro dos testes.
-- **Tipos TypeScript fortes** definidos em `src/types/api.ts` para maior previsibilidade
-  durante o desenvolvimento.
-- **Utilit�rios comuns** (`utils/DataUtils`, `utils/JsonUtils`) para gera��o de dados e
-  persist�ncia tempor�ria entre testes.
+# 🏗️ Arquitetura e Padrões
 
-### Design Decisions
+O projeto segue o padrão **Page Object Model (POM)** combinado com uma camada de **Services para API**, garantindo:
 
-1. **Localizadores centralizados**: as classes de p�gina exp�em strings de seletor que
-   podem ser usadas nos testes via fixtures.
-2. **M�todos bilingues**: a base do projeto usa nomes em portugu�s, mas adiciona aliases
-   em ingl�s para facilitar leitura em times internacionais.
-3. **API services** encapsulam detalhes do protocolo (`form`, `params`) e retornam
-   objetos `APIResponse` gen�ricos.
+- ✅ Separação clara entre ações da página e validações
+- ✅ Organização e reutilização de código
+- ✅ Baixo acoplamento entre testes e regras de navegação
+- ✅ Facilidade de manutenção e escalabilidade
 
-## ?? Ferramentas e Depend�ncias
+## 🔹 Page Object Model (POM)
 
-- **Playwright** v1.58+ com suporte a TypeScript.
-- **Node.js** (vers�o LTS recomendada).
-- Tipos Node.js e configura��es de compilador via `tsconfig.json`.
+Cada página possui sua própria classe contendo:
 
-## ??? Estrutura do Projeto
+- Mapeamento de elementos (locators)
+- Métodos de interação
+- Responsabilidades bem definidas
 
-- `src/pages` � Page Objects (objetos de p�gina).
-- `src/services` � Servi�os de API.
-- `src/fixtures` � Fixtures customizadas para testes Playwright.
-- `tests/e2e` � Testes de ponta a ponta de UI.
-- `tests/api` � Testes de API.
-- `utils` � Utilit�rios gerais como geradores de dados e manipula��o de JSON.
-- `src/types` � Defini��es de tipos/interfaces compartilhadas.
+Os testes contêm apenas:
+- Fluxo de negócio
+- Validações
+- Regras de comportamento
 
-## ?? Pr�-requisitos
+Isso mantém o teste **limpo, legível e expressivo**.
 
-Certifique-se de ter o **Node.js** instalado em sua m�quina.
+---
 
-## ?? Instala��o
+## 🔹 Camada de Services (API)
 
-1. Clone o reposit�rio:
-   ```bash
-   git clone <url-do-repositorio>
-   ```
+A camada `services` encapsula:
 
-2. Instale as depend�ncias do projeto:
-   ```bash
-   npm install
-   ```
+- Detalhes de requisições HTTP
+- Parâmetros e payloads
+- Manipulação de respostas
+- Retorno tipado com `APIResponse`
 
-3. Instale os navegadores do Playwright:
-   ```bash
-   npx playwright install
-   ```
+Isso garante:
 
-## ?? Executando os Testes
+- Reuso de chamadas
+- Abstração da implementação HTTP
+- Código mais organizado e desacoplado
+
+---
+
+## 🔹 Fixtures Customizadas
+
+Arquivo: `src/fixtures/test.fixture.ts`
+
+Permite:
+
+- Injeção automática de Page Objects
+- Reutilização de instâncias
+- Setup centralizado
+- Código de teste mais limpo
+
+---
+
+## 🔹 Tipagem Forte com TypeScript
+
+Tipos compartilhados definidos em: `src/types/api.ts`
+
+Benefícios:
+
+- Previsibilidade durante o desenvolvimento
+- Autocomplete eficiente
+- Redução de erros em tempo de compilação
+- Contratos claros entre camadas
+
+---
+
+# 🗂️ Estrutura do Projeto
+
+```
+src/
+├── pages/           → Page Objects
+├── services/        → Serviços de API
+├── fixtures/        → Fixtures customizadas
+├── types/           → Interfaces e tipos compartilhados
+├── utils/           → Utilitários (DataUtils)
+utils/               → Utilitários gerais (JsonUtils)
+tests/
+├── e2e/             → Testes de Interface
+└── api/             → Testes de API
+```
+
+---
+
+# 🛠️ Tecnologias Utilizadas
+
+- **Playwright v1.58+**
+- **TypeScript**
+- **Node.js (LTS recomendado)**
+
+---
+
+# 📋 Pré-requisitos
+
+Certifique-se de ter instalado:
+
+- Node.js (versão LTS recomendada)
+
+---
+
+# 📦 Instalação
+
+Clone o repositório:
+
+```bash
+git clone <url-do-repositorio>
+```
+
+Instale as dependências:
+
+```bash
+npm install
+```
+
+Instale os navegadores do Playwright:
+
+```bash
+npx playwright install
+```
+
+---
+
+# ▶️ Executando os Testes
 
 ### Rodar todos os testes
 ```bash
-npx playwright test
+npm test
 ```
 
 ### Rodar apenas testes de API
 ```bash
-npx playwright test tests/api
+npm run test:api
 ```
 
 ### Rodar apenas testes E2E (Interface)
 ```bash
-npx playwright test tests/e2e
+npm run test:e2e
 ```
 
-### Rodar em modo debug (com interface gr�fica)
+### Rodar em modo debug (UI Mode)
 ```bash
-npx playwright test --ui
+npm run test:debug
 ```
 
-### Visualizar o relat�rio HTML
+### Visualizar relatório HTML
 ```bash
-npx playwright show-report
+npm run report
 ```
 
-## ?? Boas Pr�ticas Adotadas
+---
 
-- Uso intensivo de async/await e espera expl�cita via `expect(locator).toBeVisible`.
-- Reuso de dados gerados entre fluxos (ex: cadastro -> login) mediante `JsonUtils`.
-- Testes isolados que criam e limpam seus pr�prios dados.- Quando um fluxo depende de outro (cadastro seguido de exclusão), usamos `test.describe.serial` para garantir execução sequencial em vez de concorrente.
-## ?? Roadmap e Melhorias Futuras
+# ✅ Boas Práticas Adotadas
 
-Estamos constantemente evoluindo o framework. Abaixo est�o os pontos de melhoria mapeados e funcionalidades que ser�o implementadas em breve:
+- ✔ Uso consistente de async/await
+- ✔ Esperas explícitas com `expect(locator).toBeVisible()`
+- ✔ Testes independentes (criam e limpam seus próprios dados)
+- ✔ Reutilização de massa de dados entre fluxos
+- ✔ Separação clara de responsabilidades
+- ✔ Métodos pequenos e com única responsabilidade (SRP)
+- ✔ Nomenclatura clara e descritiva
+- ✔ Baixo acoplamento entre testes e implementação
+- ✔ Métodos bilingues (português + inglês) para maior flexibilidade
 
-### ?? BDD com Cucumber (Gherkin)
-- Implementa��o do **Cucumber** para permitir a escrita de cen�rios de teste em linguagem natural (Gherkin).
-- Objetivo: Melhorar a comunica��o entre QA, Desenvolvedores e Stakeholders.
+---
 
-### ?? Cobertura de Testes
-- Adi��o de novos casos de teste para cobrir fluxos alternativos e de exce��o.
-- Refinamento dos testes existentes para maior robustez.
+# 🔄 Execução Sequencial Quando Necessário
 
-### ?? Testes Mobile
-- **Em breve:** Disponibiliza��o de testes automatizados focados em emula��o de dispositivos m�veis e responsividade.
-- Valida��o da experi�ncia do usu�rio em telas menores (Android/iOS via emula��o do Playwright).
+Quando um fluxo depende diretamente de outro (ex: cadastro seguido de exclusão), utilizamos:
 
-## ?? Notas Adicionais
+```typescript
+test.describe.serial()
+```
 
-- O projeto utiliza um utilit�rio (`JsonUtils`) para persistir dados de massa de teste gerados dinamicamente, permitindo o compartilhamento de dados entre testes de cria��o e exclus�o de conta.
+Isso garante execução sequencial e evita problemas de concorrência.
 
+---
+
+# 🧪 Persistência de Massa de Dados
+
+O projeto utiliza o utilitário `JsonUtils` para:
+
+- Persistir dados gerados dinamicamente
+- Compartilhar dados entre testes
+- Manter independência entre cenários
+
+**Exemplo de uso:**
+
+1. Criar usuário
+2. Salvar dados em JSON
+3. Utilizar no teste de login ou exclusão
+
+---
+
+# 🚧 Roadmap e Melhorias Futuras
+
+O framework está em constante evolução.
+
+## 🔹 BDD com Cucumber (Gherkin)
+
+- Implementação de escrita de cenários em linguagem natural
+- Maior colaboração entre QA, Devs e Stakeholders
+
+## 🔹 Expansão da Cobertura de Testes
+
+- Fluxos alternativos
+- Casos de erro
+- Cenários de exceção
+- Testes negativos
+
+## 🔹 Testes Mobile
+
+- Emulação de dispositivos móveis
+- Validação de responsividade
+- Testes Android/iOS via Playwright
+
+---
+
+# 🎯 Objetivo do Projeto
+
+Este projeto foi desenvolvido com foco em:
+
+- Demonstrar boas práticas de automação
+- Aplicar padrões de arquitetura consolidados
+- Evidenciar organização, qualidade e escalabilidade
+- Servir como base para projetos reais de QA/SDET
+
+---
+
+# 🤖 Ferramentas e Assistência
+
+Este projeto foi desenvolvido com suporte de **IAs** para acelerar o processo e melhorar a qualidade:
+
+- **Claude (Anthropic)** - Arquitetura, refatoração de código, otimizações e boas práticas
+- **ChatGPT (OpenAI)** - Ideação, estrutura de documentação e melhorias de legibilidade
+
+O uso de IAs permitiu:
+- ⚡ Acelerar o desenvolvimento mantendo qualidade
+- 🔍 Identificar padrões e anti-patterns
+- 📚 Estruturar documentação clara e profissional
+- 🎯 Aplicar melhores práticas de forma consistente
+- 🛠️ Otimizar código e arquitetura
+
+---
+
+# 📝 Contribuições
+
+Se desejar contribuir ou sugerir melhorias, fique à vontade para:
+
+- Abrir uma **issue** com dúvidas ou sugestões
+- Enviar um **pull request** com melhorias
+- Reportar bugs ou comportamentos inesperados
+
+---
+
+**Desenvolvido com ❤️ e auxílio de IA**
