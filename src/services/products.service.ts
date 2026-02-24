@@ -14,12 +14,15 @@ export class ProductsApiService {
 
     async searchProduct(keyword: string): Promise<APIResponse> {
         // A API do Automation Exercise espera parâmetros de formulário para POST
-        return this.request.post(`${this.baseUrl}/searchProduct`, {
+        return this.request.post(`${this.baseUrl}/`, {
             form: {
                 search_product: keyword
             }
         });
     }
+    
+    
+
 
     async verifyLogin(email: string, password: string): Promise<APIResponse> {
         return this.request.post(`${this.baseUrl}/verifyLogin`, {
@@ -30,7 +33,19 @@ export class ProductsApiService {
         });
     }
 
+    async verifyLoginWithoutEmail(password: string): Promise<APIResponse> {
+        return this.request.post(`${this.baseUrl}/verifyLogin`, {
+            form: {
+                password: password
+            }
+        });
+    }
+
     async postAllProducts(): Promise<APIResponse> {
         return this.request.post(`${this.baseUrl}/productsList`);
     }
+
+    
+
+    
 }

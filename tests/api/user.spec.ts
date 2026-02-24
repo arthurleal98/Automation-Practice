@@ -1,52 +1,93 @@
 import { test, expect } from '@playwright/test';
-import { ProductsApiService } from '../../src/services/products.service';
+import { UsersApiService } from '../../src/services/users.service';
 
-test.describe('Testes de API - Produtos e Login', () => {
+test.describe('Testes de API - Usuários', () => {
+  let apiService: UsersApiService;
 
-    test('GET - Listar todos os produtos', async ({ request }) => {
-        const apiService = new ProductsApiService(request);
-        
-        const response = await apiService.getAllProducts();
-        
-        // Validações básicas de status HTTP
-        expect(response.status()).toBe(200);
-        
-        // Parse do JSON
-        const responseBody = await response.json();
-        
-        // Validações do corpo da resposta (baseado na doc do Automation Exercise)
-        expect(responseBody.responseCode).toBe(200);
-        expect(responseBody.products.length).toBeGreaterThan(0);
-    });
+  test.beforeEach(async ({ request }) => {
+    apiService = new UsersApiService(request);
+  });
 
-    test('POST - Tentar criar produto (Método não permitido)', async ({ request }) => {
-        const apiService = new ProductsApiService(request);
-        
-        const response = await apiService.postAllProducts();
-        
-        // 1. O status HTTP retornado é 200, pois o servidor processou a requisição
-        expect(response.status()).toBe(200);
-        
-        // 2. O erro real (405) está dentro do corpo do JSON
-        const responseBody = await response.json();
-        expect(responseBody.responseCode).toBe(405);
-        expect(responseBody.message).toBe("This request method is not supported.");
-    });
+  function generateUser() {
+    const timestamp = Date.now();
+    return {
+      name: 'API User Test',
+      email: `api_test_${timestamp}@example.com`,
+      password: 'password123',
+      title: 'Mr',
+      birth_date: '10',
+      birth_month: '05',
+      birth_year: '1990',
+      firstname: 'API',
+      lastname: 'Test',
+      company: 'QA Corp',
+      address1: 'Street 1',
+      address2: 'Apt 2',
+      country: 'United States',
+      zipcode: '90001',
+      state: 'California',
+      city: 'Los Angeles',
+      mobile_number: '1234567890'
+    };
+  }
 
-    test('POST - Pesquisar produto', async ({ request }) => {
-        const apiService = new ProductsApiService(request);
-        
-        const response = await apiService.searchProduct('jean');
-        
-        // Validações básicas de status HTTP
-        expect(response.status()).toBe(200);
-        // Parse do JSON
+  test('POST - Criar conta de usuário', async () => {
+    const user = generateUser();
 
-        const responseBody = await response.json();
-        
-        // Validações do corpo da resposta
-        expect(responseBody.responseCode).toBe(200);
-       
-    });
+    const response = await apiService.createAccount(user);
+    expect(response.status()).toBe(200);
 
+    const body = await response.json();
+    expect(body.responseCode).toBe(201);
+    expect(body.message).toBe('User created!');
+  });
+
+  test('POST - Verificar login com dados válidos', async () => {
+    const user = generateUser();
+
+    await apiService.createAccount(user);
+
+    const response = await apiService.verifyLogin(user.email, user.password);
+    expect(response.status()).toBe(200);
+
+    const body = await response.json();
+    expect(body.responseCode).toBe(200);
+    expect(body.message).toBe('User exists!');
+  });
+
+  test('POST - Verificar login com email inválido', async () => {
+    const response = await apiService.verifyLogin('invalid@email.com', 'wrongpass');
+    expect(response.status()).toBe(200);
+
+    const body = await response.json();
+    expect(body.responseCode).toBe(404);
+    expect(body.message).toBe('User not found!');
+  });
+
+  test('DELETE - Excluir conta de usuário', async () => {
+    const user = generateUser();
+
+    await apiService.createAccount(user);
+
+    const response = await apiService.deleteAccount(user.email, user.password);
+    expect(response.status()).toBe(200);
+
+    const body = await response.json();
+    expect(body.responseCode).toBe(200);
+    expect(body.message).toBe('Account deleted!');
+  });
+
+  test('GET - Buscar detalhes do usuário por email', async () => {
+    const user = generateUser();
+
+    await apiService.createAccount(user);
+
+    const response = await apiService.getUserDetailByEmail(user.email);
+    expect(response.status()).toBe(200);
+
+    const body = await response.json();
+    expect(body.responseCode).toBe(200);
+    expect(body.user).toBeDefined();
+    expect(body.user.email).toBe(user.email);
+  });
 });

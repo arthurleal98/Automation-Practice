@@ -51,4 +51,37 @@ test.describe('Product Details', () => {
     await productPage.clicarViewProduct(1);
 
   });
-});
+});  test('Verificar detalhes do produto pesquisado', async ({ homePage, productPage, page }) => {
+    // 1. Abrir o navegador e 2. Navegar para a url 'http://automationexercise.com'
+    await homePage.acessarPaginaInicial();
+
+    // 3. Verificar que a página inicial é visível com sucesso
+    await expect(page).toHaveTitle(/Automation Exercise/);
+
+    // 4. Clicar no botão 'Products'
+    await homePage.acessarPaginaProdutos();
+
+    // 5. Verificar que a página de todos os produtos é exibida com sucesso
+    await expect(page.locator(productPage.productsHeader)).toBeVisible();
+
+    // 6. Inserir o nome do produto na barra de pesquisa e clicar no botão de pesquisa
+    const nomeProduto = 'Blue Top';
+    await productPage.pesquisarProduto(nomeProduto);
+
+    // 7. Verificar que 'SEARCHED PRODUCTS' é visível
+    await expect(page.locator('h2:has-text("Searched Products")')).toBeVisible();
+
+    // 8. Verificar que o produto pesquisado é visível
+    await expect(page.locator(productPage.itemsList)).toContainText(nomeProduto);
+
+    // 9. Clicar em 'View Product' do primeiro resultado
+    await productPage.clicarViewProduct(1);
+
+    // 10. Verificar detalhes: nome, categoria, preço, disponibilidade, condição e marca
+    expect(await productPage.obterNomeProduto()).toContain(nomeProduto);
+    expect(await productPage.obterCategoriaProduto()).toBeDefined();
+    expect(await productPage.obterPrecoProduto()).toBeDefined();
+    expect(await productPage.obterDisponibilidadeProduto()).toBeDefined();
+    expect(await productPage.obterCondicaoProduto()).toBeDefined();
+    expect(await productPage.obterMarcaProduto()).toBeDefined();
+  });
